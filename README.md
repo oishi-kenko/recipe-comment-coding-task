@@ -269,7 +269,7 @@ py --version
 ### 2. リポジトリをクローンする
 
 ```bash
-git clone <お渡しするリポジトリのURL>
+git clone https://github.com/oishi-kenko/recipe-comment-coding-task.git
 cd recipe-comment-coding-task
 ```
 
