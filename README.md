@@ -335,9 +335,27 @@ curl "http://127.0.0.1:8000/recipe_comment?user_id=1&recipe_id=1691"
 
 # (4) テストを実行する
 pytest
+
+# (5) サーバーを停止する
+#  → (2) を実行したターミナルで Ctrl + C を押す
 ```
 
 動作確認（3）は、ブラウザで [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) を開いて画面から試すのが簡単です（FastAPI の自動ドキュメント）。
+
+> **サーバーの停止**：サーバーを起動したターミナルで `Ctrl + C` を押すと止まります。
+> 別ターミナルなどから停止したい場合は次のコマンドでも止められます。
+>
+> ```bash
+> # macOS / Linux
+> pkill -f "uvicorn app.main:app"
+>
+> # Windows (PowerShell)
+> taskkill /F /IM python.exe
+> ```
+>
+> 次の起動時に `Address already in use`（ポート使用中）と出る場合は、前のサーバーが
+> 残っています。上記で停止するか、`uvicorn app.main:app --reload --port 8001` のように
+> 別のポートで起動してください。
 
 > Windows の PowerShell では `curl` が別コマンドの別名になっているため、上記の `curl` がそのまま動かないことがあります。その場合はブラウザの `/docs` を使うか、`curl.exe "http://..."` のように `.exe` を付けて実行してください。
 
