@@ -25,4 +25,4 @@ COMMENTS_CSV = OUTPUT_DIR / "comments.csv"
 
 # OpenAI の設定
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5.4-mini")
