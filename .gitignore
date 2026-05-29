@@ -1,0 +1,22 @@
+# ===== 機密情報 =====
+# API キーを書いた .env は絶対にコミットしない
+.env
+
+# ===== 社内用資料（インターンには配布しない） =====
+_internal/
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+*.egg-info/
+
+# ===== エディタ / OS =====
+.vscode/
+.idea/
+.DS_Store
