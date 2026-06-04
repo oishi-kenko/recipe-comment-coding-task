@@ -18,7 +18,7 @@ app = FastAPI(title="Recipe Comment API")
 
 _FALLBACK_COMMENT = "このレシピをぜひお楽しみください。"
 
-# 初心者とみなすスキル（beginner コメントを優先するユーザー）
+# 手軽さの一言を添えるスキル層（初級・初心者）
 _BEGINNER_SKILLS = {"初心者", "初級"}
 
 
@@ -37,35 +37,29 @@ def _concern_category(category_key: str) -> str:
 
 
 def _pick_comment(user: dict, recipe_id: str) -> str:
-    """ユーザーとレシピから、出すコメントを1つ選ぶ。
+    """ユーザーとレシピから、出すコメントを組み立てる。
 
-    優先順位:
-      1. 初心者ユーザー & このレシピに beginner コメントがあれば beginner
-      2. ユーザーの病態カテゴリのコメントがあればそれ
-      3. general コメント
-      4. どれも無ければフォールバック固定文
+    ベースは病態カテゴリ（無ければ general）のコメント。
+    初級・初心者ユーザー かつ このレシピが簡単（beginnerコメントあり）なら、
+    手軽さの一言を後ろに連結する。
     """
     skill = (user.get("cooking_skill") or "").strip()
     concern_cat = _concern_category(classify_user(user))
 
-    # 1. 初心者 × 簡単レシピ（beginner が生成されているレシピ）
+    # ベースのコメント: 病態 → general → フォールバック の順で確定
+    base = (
+        _comments.get((recipe_id, concern_cat))
+        or _comments.get((recipe_id, "general"))
+        or _FALLBACK_COMMENT
+    )
+
+    # 初級・初心者 かつ 簡単レシピ（beginnerが生成されている）なら手軽さを連結
     if skill in _BEGINNER_SKILLS:
         beginner = _comments.get((recipe_id, "beginner"))
         if beginner:
-            return beginner
+            return f"{base}{beginner}"
 
-    # 2. 病態カテゴリ
-    specific = _comments.get((recipe_id, concern_cat))
-    if specific:
-        return specific
-
-    # 3. general
-    general = _comments.get((recipe_id, "general"))
-    if general:
-        return general
-
-    # 4. 最終フォールバック
-    return _FALLBACK_COMMENT
+    return base
 
 
 @app.get("/recipe_comment", response_model=CommentResponse)
