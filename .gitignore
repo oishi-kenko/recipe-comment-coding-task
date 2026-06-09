@@ -20,4 +20,3 @@ env/
 .vscode/
 .idea/
 .DS_Store
-output/comments.csv
