@@ -85,9 +85,9 @@ def save_comments(rows: list[dict], path: Path | None = None) -> None:
         writer.writerows(rows)
 
 
-def load_comments(path: Path | None = None) -> dict[str, str]:
-    """保存済みコメントを {category: comment} の形で読み込む。"""
-    comments: dict[str, str] = {}
+def load_comments(path: Path | None = None) -> dict[tuple[str, str], str]:
+    """保存済みコメントを {(recipe_id, category): comment} の形で読み込む。"""
+    comments: dict[tuple[str, str], str] = {}
     if not path:
         path = config.COMMENTS_CSV
     if not path.exists():
@@ -95,5 +95,5 @@ def load_comments(path: Path | None = None) -> dict[str, str]:
         return comments
     with open(path, encoding="utf-8") as f:
         for row in csv.DictReader(f):
-            comments[row["category"]] = row["comment"]
+            comments[(row["recipe_id"], row["category"])] = row["comment"]
     return comments
